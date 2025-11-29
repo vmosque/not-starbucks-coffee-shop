@@ -5,16 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Not Starbucks</title>
     <link rel="stylesheet" href="styles/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <!-- START SCREEN -->
-    <div id="start-screen">
-      <div>Taza cafe</div>
 
-      <div>
-        pizarra
-        <div>start game</div>
-        <div>instructions</div>
+    <div id="start-screen">
+      <div class="mug-layer">
+        <img src="assets/coffee-mug.png" alt="" class="mug-img" />
+      </div>
+
+      <div id="board-layer">
+        <img src="assets/board.png" alt="" />
+        <button class="start-btn">START GAME</button>
+        <button class="instructions-btn">INSTRUCTIONS</button>
       </div>
     </div>
     <!-- GAME SCREEN -->

@@ -1,3 +1,4 @@
+/* Centrar el juego en la ventana */
 body {
   margin: 0;
   background-color: #111;
@@ -7,14 +8,68 @@ body {
   height: 100vh;
 }
 
+/* Pantalla de inicio con el fondo del local */
 #start-screen {
-  width: 1152px;
+  width: 1152px; /* adapta al tamaño de tu imagen */
   height: 768px;
   position: relative;
-
-  background-image: url("..//assets/start-screen-background-img.png");
+  background-image: url("../assets/start-screen-background-img.png");
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-position: center;
   image-rendering: pixelated;
+}
+
+/* Taza (luego animas el vapor si quieres) */
+.mug-layer {
+  position: absolute;
+  /* posición aprox centrada en la ventana */
+  top: 260px; /* ajusta fino */
+  left: 62%;
+  transform: translateX(-50%);
+}
+
+.mug-img {
+  width: 240px; /* ajusta al gusto */
+  image-rendering: pixelated;
+}
+
+/* Pizarra apoyada en el suelo, a la derecha */
+#board-layer {
+  position: absolute;
+  bottom: -100px; /* separada un poco del suelo */
+  right: 140px; /* separada del borde derecho */
+}
+
+#board-layer img {
+  width: 300px; /* tamaño de la pizarra */
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* Botones sobre la pizarra */
+#board-layer button {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: #f5d9a3; /* color crema pixel art */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  left: 49%;
+  transform: translateX(-50%);
+}
+
+/* posición de cada botón dentro de la pizarra */
+.start-btn {
+  top: 140px; /* sube/baja este valor si no cae perfecto */
+}
+
+.instructions-btn {
+  top: 195px; /* igual con este */
+}
+
+/* pequeño efecto hover */
+#board-layer button:hover {
+  transform: translateX(-50%) scale(1.05);
 }
