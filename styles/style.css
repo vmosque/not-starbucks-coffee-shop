@@ -46,30 +46,118 @@ body {
   image-rendering: pixelated;
 }
 
-/* Botones sobre la pizarra */
-#board-layer button {
+.start-btn {
+  position: absolute;
+  top: 145px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: "Press Start 2P", monospace;
-  font-size: 10px;
-  letter-spacing: 0.5px;
-  color: #f5d9a3; /* color crema pixel art */
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #efd8a0;
   background: transparent;
   border: none;
-  cursor: pointer;
-  position: absolute;
-  left: 49%;
-  transform: translateX(-50%);
-}
-
-/* posición de cada botón dentro de la pizarra */
-.start-btn {
-  top: 140px; /* sube/baja este valor si no cae perfecto */
 }
 
 .instructions-btn {
-  top: 195px; /* igual con este */
+  position: absolute;
+  top: 195px;
+  left: 47%;
+  transform: translateX(-50%);
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #efd8a0;
+  background: transparent;
+  border: none;
 }
 
 /* pequeño efecto hover */
 #board-layer button:hover {
   transform: translateX(-50%) scale(1.05);
+}
+/* GAME SCREEN */
+#game-screen {
+  width: 1152px;
+  height: 768px;
+  position: relative;
+  background-image: url("../assets/game-screen-background-img.png"); /* <-- tu nueva imagen */
+  background-size: 100% 100%; /* que llene el div SIN recortar */
+  background-repeat: no-repeat;
+  display: none; /* oculto al principio */
+}
+
+#shelf {
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+}
+.ingredient {
+  position: absolute;
+  width: 120px; /* ajusta al tamaño de tus sprites */
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+/* milk */
+#shelf img[data-name="milk"] {
+  top: 55px; /* altura del estante */
+  left: 30px;
+}
+
+/* coffee */
+#shelf img[data-name="coffee"] {
+  top: 65px;
+  left: 190px;
+}
+
+/* cocoa */
+#shelf img[data-name="cocoa"] {
+  top: 100px;
+  left: 330px;
+}
+
+/* foam */
+#shelf img[data-name="foam"] {
+  top: 50px;
+  left: 480px;
+}
+#output-area {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+#brew-btn {
+  position: absolute;
+  bottom: 40px;
+  right: 80px;
+}
+
+.ingredient:hover {
+  transform: scale(1.07);
+}
+
+#output-area {
+  position: absolute;
+  bottom: 40px; /* distancia del borde inferior */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.selected-ing {
+  width: 72px; /* o el tamaño de tus iconos */
+  image-rendering: pixelated;
+}
+
+#brew-btn {
+  position: absolute;
+  bottom: 30px;
+  right: 80px;
 }
