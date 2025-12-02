@@ -12,32 +12,35 @@
   </head>
   <body>
     <!-- START SCREEN -->
-
     <div id="start-screen">
       <div class="mug-layer">
-        <img src="assets/coffee-mug.png" alt="" class="mug-img" />
+        <img src="assets/coffee-mug.png" alt="Coffee mug" class="mug-img" />
       </div>
 
       <div id="board-layer">
-        <img src="assets/board.png" alt="" />
+        <img src="assets/board.png" alt="Board" />
         <button class="start-btn">START GAME</button>
         <button class="instructions-btn">INSTRUCTIONS</button>
       </div>
     </div>
+
     <!-- GAME SCREEN -->
     <div id="game-screen">
+      <!-- HUD -->
       <div id="hud">
         <div class="hud-left">Day <span id="day">1</span></div>
-        <div class="hud-center">Time <span id="time">30</span>s</div>
+        <div class="hud-center">Time <span id="time">15</span>s</div>
         <div class="hud-right">
           Score <span id="score">0</span> | Lives <span id="lives">3</span>
         </div>
       </div>
 
+      <!-- Pedido -->
       <div id="order-area">
-        Customer wants: <span id="order-text">LATTE</span>
+        Customer wants: <span id="order-text">ESPRESSO</span>
       </div>
 
+      <!-- Estante con ingredientes -->
       <div id="shelf">
         <img src="assets/ing-milk.png" class="ingredient" data-name="milk" />
         <img
@@ -49,11 +52,25 @@
         <img src="assets/ing-foam.png" class="ingredient" data-name="foam" />
       </div>
 
-      <div id="output-area"></div>
+      <!-- Barra inferior -->
+      <div id="bottom-bar">
+        <!-- Tu bebida -->
+        <div id="drink-panel">
+          <div id="drink-label">Your drink:</div>
+          <div id="output-area"></div>
+        </div>
 
-      <button id="brew-btn">BREW</button>
+        <!-- Receta del pedido actual -->
+        <div id="recipe-panel">
+          <div class="recipe-title">Recipe:</div>
+          <div id="recipe-content"></div>
+        </div>
+
+        <!-- Botón para preparar -->
+        <button id="brew-btn">BREW</button>
+      </div>
     </div>
-    <!-- END SCREEN -->
+
     <script src="js/script.js"></script>
   </body>
 </html>

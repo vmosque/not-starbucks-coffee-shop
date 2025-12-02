@@ -8,9 +8,9 @@ body {
   height: 100vh;
 }
 
-/* Pantalla de inicio con el fondo del local */
+/* START SCREEN */
 #start-screen {
-  width: 1152px; /* adapta al tamaño de tu imagen */
+  width: 1152px;
   height: 768px;
   position: relative;
   background-image: url("../assets/start-screen-background-img.png");
@@ -19,29 +19,28 @@ body {
   image-rendering: pixelated;
 }
 
-/* Taza (luego animas el vapor si quieres) */
+/* Taza */
 .mug-layer {
   position: absolute;
-  /* posición aprox centrada en la ventana */
-  top: 260px; /* ajusta fino */
+  top: 260px;
   left: 62%;
   transform: translateX(-50%);
 }
 
 .mug-img {
-  width: 240px; /* ajusta al gusto */
+  width: 240px;
   image-rendering: pixelated;
 }
 
-/* Pizarra apoyada en el suelo, a la derecha */
+/* Pizarra */
 #board-layer {
   position: absolute;
-  bottom: -100px; /* separada un poco del suelo */
-  right: 140px; /* separada del borde derecho */
+  bottom: -100px;
+  right: 140px;
 }
 
 #board-layer img {
-  width: 300px; /* tamaño de la pizarra */
+  width: 300px;
   display: block;
   image-rendering: pixelated;
 }
@@ -76,16 +75,18 @@ body {
 #board-layer button:hover {
   transform: translateX(-50%) scale(1.05);
 }
+
 /* GAME SCREEN */
 #game-screen {
   width: 1152px;
   height: 768px;
   position: relative;
-  background-image: url("../assets/game-screen-background-img.png"); /* <-- tu nueva imagen */
-  background-size: 100% 100%; /* que llene el div SIN recortar */
+  background-image: url("../assets/game-screen-background-img.png");
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   display: none; /* oculto al principio */
 }
+
 /* HUD ARRIBA */
 #hud {
   position: absolute;
@@ -111,77 +112,142 @@ body {
   color: #efd8a0;
 }
 
+/* Estante */
 #shelf {
   position: absolute;
-  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  inset: 0;
 }
+
 .ingredient {
   position: absolute;
-  width: 120px; /* ajusta al tamaño de tus sprites */
+  width: 120px;
   image-rendering: pixelated;
   cursor: pointer;
 }
 
-/* milk */
+/* posiciones de cada ingrediente en el estante */
 #shelf img[data-name="milk"] {
-  top: 55px; /* altura del estante */
+  top: 55px;
   left: 30px;
 }
 
-/* coffee */
 #shelf img[data-name="coffee"] {
   top: 65px;
   left: 190px;
 }
 
-/* cocoa */
 #shelf img[data-name="cocoa"] {
   top: 100px;
   left: 330px;
 }
 
-/* foam */
 #shelf img[data-name="foam"] {
   top: 50px;
   left: 480px;
-}
-#output-area {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-#brew-btn {
-  position: absolute;
-  bottom: 40px;
-  right: 80px;
 }
 
 .ingredient:hover {
   transform: scale(1.07);
 }
 
-#output-area {
+/* BARRA INFERIOR */
+#bottom-bar {
   position: absolute;
-  bottom: 40px; /* distancia del borde inferior */
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  height: 120px;
   display: flex;
-  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+}
+
+/* Panel "Your drink" */
+#drink-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 3px solid #b8833f;
+  background: #d9a85a;
+  box-shadow: 0 0 0 3px #7b4b25;
+}
+
+#drink-label {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  color: #4b2a1e;
+}
+
+/* Ingredientes seleccionados */
+#output-area {
+  display: flex;
+  gap: 8px;
   align-items: center;
 }
 
 .selected-ing {
-  width: 72px; /* o el tamaño de tus iconos */
+  width: 64px;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+/* Panel RECETA */
+#recipe-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 3px solid #b8833f;
+  background: #d9a85a;
+  box-shadow: 0 0 0 3px #7b4b25;
+}
+
+.recipe-title {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  color: #4b2a1e;
+}
+
+#recipe-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.recipe-ing {
+  width: 40px;
   image-rendering: pixelated;
 }
 
+.recipe-plus {
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  color: #4b2a1e;
+}
+
+/* Botón BREW */
 #brew-btn {
-  position: absolute;
-  bottom: 30px;
-  right: 80px;
+  position: static; /* lo coloca el flex del bottom-bar */
+  padding: 10px 22px;
+  border: 3px solid #f5d9a3;
+  background: #4b2a1e;
+  color: #f5d9a3;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px #000;
+  cursor: pointer;
+  image-rendering: pixelated;
+}
+
+#brew-btn:hover {
+  background: #70402b;
+  transform: translateY(-2px);
+}
+
+#brew-btn:active {
+  transform: translateY(0);
+  background: #3a2415;
 }

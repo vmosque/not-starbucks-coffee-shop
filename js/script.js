@@ -1,8 +1,21 @@
 const startScreen = document.getElementById("start-screen");
 const gameScreen = document.getElementById("game-screen");
-const selection = []; // array con los nombres de los ingredientes
+
+// HUD
+const dayEl = document.getElementById("day");
+const timeEl = document.getElementById("time");
+const scoreEl = document.getElementById("score");
+const livesEl = document.getElementById("lives");
+const orderTextEl = document.getElementById("order-text");
+
+// elementos del juego
+const shelfItems = document.querySelectorAll(".ingredient");
+const outputArea = document.getElementById("output-area");
+const recipeContent = document.getElementById("recipe-content");
+const brewBtn = document.getElementById("brew-btn");
 
 // ESTADO DEL JUEGO
+let selection = []; // ingredientes elegidos
 let score = 0;
 let lives = 3;
 let day = 1;
@@ -21,41 +34,65 @@ const recipes = {
 
 const recipeNames = Object.keys(recipes);
 const MAX_INGREDIENTS = 4;
-const shelfItems = document.querySelectorAll(".ingredient");
-const outputArea = document.getElementById("output-area");
 
+// ---------- HUD ----------
 function updateHUD() {
-  // asumiendo que tienes estos spans en el HTML
-  document.getElementById("time").textContent = timeLeft;
-  document.getElementById("score").textContent = score;
-  document.getElementById("lives").textContent = lives;
+  timeEl.textContent = timeLeft;
+  scoreEl.textContent = score;
+  livesEl.textContent = lives;
+  dayEl.textContent = day;
 }
 
+// ---------- RECETA VISUAL ----------
+function updateRecipePanel() {
+  if (!currentRecipe) return;
+
+  recipeContent.innerHTML = "";
+
+  const recipe = recipes[currentRecipe];
+
+  recipe.forEach((name, index) => {
+    const img = document.createElement("img");
+    img.src = `assets/ing-${name}.png`;
+    img.classList.add("recipe-ing");
+    recipeContent.appendChild(img);
+
+    if (index < recipe.length - 1) {
+      const plus = document.createElement("span");
+      plus.textContent = "+";
+      plus.classList.add("recipe-plus");
+      recipeContent.appendChild(plus);
+    }
+  });
+}
+
+// ---------- GAME OVER ----------
 function gameOver() {
   isGameOver = true;
   clearInterval(timerId);
   alert("GAME OVER");
 }
 
+// ---------- NUEVO PEDIDO ----------
 function newOrder() {
   if (isGameOver) return;
 
   const index = Math.floor(Math.random() * recipeNames.length);
   currentRecipe = recipeNames[index];
 
-  document.getElementById("order-text").textContent =
-    currentRecipe.toUpperCase();
+  orderTextEl.textContent = currentRecipe.toUpperCase();
 
-  // Reiniciar la selección de ingredientes
-  selection.length = 0;
+  // limpiar selección
+  selection = [];
   updateOutputArea();
 
-  // Reiniciar tiempo
-  timeLeft = 15; // luego lo ajustas tú
+  // reiniciar tiempo
+  timeLeft = 15;
   updateHUD();
+  updateRecipePanel();
 }
 
-// TIMER
+// ---------- TIMER ----------
 timerId = setInterval(() => {
   if (isGameOver) return;
   if (gameScreen.style.display === "none") return;
@@ -73,27 +110,34 @@ timerId = setInterval(() => {
       return;
     }
     updateHUD();
-    newOrder(); // siguiente cliente
+    newOrder();
   }
 }, 1000);
 
+// ---------- START BUTTON ----------
 document.querySelector(".start-btn").addEventListener("click", () => {
   startScreen.style.display = "none";
   gameScreen.style.display = "block";
+
+  // resetear estado por si se reinicia
+  score = 0;
+  lives = 3;
+  day = 1;
+  timeLeft = 15;
+  isGameOver = false;
+  updateHUD();
   newOrder();
 });
 
-// 1. actualizar la fila visual
+// ---------- OUTPUT (INGREDIENTES ELEGIDOS) ----------
 function updateOutputArea() {
   outputArea.innerHTML = "";
 
   selection.forEach((name, index) => {
     const img = document.createElement("img");
-    img.src = `assets/ing-${name}.png`; // ing-milk, ing-coffee, etc
+    img.src = `assets/ing-${name}.png`;
     img.classList.add("selected-ing");
-    img.dataset.index = index; // para poder borrarlo luego
 
-    // al hacer click en una imagen de abajo -> borrar ese ingrediente
     img.addEventListener("click", () => {
       removeIngredient(index);
     });
@@ -103,17 +147,15 @@ function updateOutputArea() {
 }
 
 function removeIngredient(index) {
-  selection.splice(index, 1); // quita 1 elemento en esa posición
-  updateOutputArea(); // vuelve a pintar la fila
+  selection.splice(index, 1);
+  updateOutputArea();
 }
 
+// ---------- CLICK EN INGREDIENTES DEL ESTANTE ----------
 shelfItems.forEach((el) => {
   el.addEventListener("click", () => {
     if (isGameOver) return;
-
-    if (selection.length >= MAX_INGREDIENTS) {
-      return;
-    }
+    if (selection.length >= MAX_INGREDIENTS) return;
 
     const name = el.dataset.name; // "milk", "coffee", etc.
     selection.push(name);
@@ -121,16 +163,20 @@ shelfItems.forEach((el) => {
   });
 });
 
+// ---------- PREPARAR BEBIDA ----------
 function brewDrink() {
   if (isGameOver) return;
   if (!currentRecipe) return;
+  if (selection.length === 0) return; // no penalizar si está vacío
 
   const expected = recipes[currentRecipe];
 
-  // orden NO importa
+  const sortedSel = [...selection].sort();
+  const sortedExp = [...expected].sort();
+
   const ok =
     selection.length === expected.length &&
-    [...selection].sort().join(",") === [...expected].sort().join(",");
+    sortedSel.join(",") === sortedExp.join(",");
 
   if (ok) {
     score += 10;
@@ -149,7 +195,8 @@ function brewDrink() {
   newOrder();
 }
 
-document.getElementById("brew-btn").addEventListener("click", brewDrink);
+// botón y barra espaciadora
+brewBtn.addEventListener("click", brewDrink);
 
 document.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
