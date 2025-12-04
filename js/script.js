@@ -1,17 +1,14 @@
 const startScreen = document.getElementById("start-screen");
 const gameScreen = document.getElementById("game-screen");
 
-// HUD
 const dayEl = document.getElementById("day");
 const timeEl = document.getElementById("time");
 const scoreEl = document.getElementById("score");
 const livesEl = document.getElementById("lives");
 const orderTextEl = document.getElementById("order-text");
 
-// Cliente
 const customerImg = document.getElementById("customer-img");
 
-// elementos del juego
 const shelfItems = document.querySelectorAll(".ingredient");
 const outputArea = document.getElementById("output-area");
 const recipeContent = document.getElementById("recipe-content");
@@ -25,23 +22,22 @@ const instructionsScreen = document.getElementById("instructions-screen");
 const instructionsBtn = document.querySelector(".instructions-btn");
 const closeInstructionsBtn = document.getElementById("close-instructions");
 
-// ESTADO DEL JUEGO
-let selection = []; // ingredientes elegidos
+let selection = [];
 let score = 0;
 let lives = 3;
 let day = 1;
 let timeLeft = 15;
 let currentRecipe = null;
 let isGameOver = false;
+
 let timerId = null;
-
 let ordersServed = 0;
-const ORDERS_PER_DAY = 5; // pedidos para subir de día
-const BASE_TIME = 20; // tiempo base del Día 1
-const MIN_TIME = 8; // tiempo mínimo
-const TIME_DECREASE_PER_DAY = 3; // se resta por cada día
 
-// RECETAS
+const ORDERS_PER_DAY = 5;
+const BASE_TIME = 20;
+const MIN_TIME = 8;
+const TIME_DECREASE_PER_DAY = 3;
+
 const recipes = {
   latte: ["coffee", "milk", "foam"],
   mocha: ["coffee", "milk", "cocoa"],
@@ -49,24 +45,12 @@ const recipes = {
   cappu: ["coffee", "foam", "foam"],
 };
 
-const recipeNames = Object.keys(recipes);
-const MAX_INGREDIENTS = 4;
-
-// Qué recetas están disponibles según el día
 function getAvailableRecipes() {
-  if (day === 1) {
-    // Día 1: solo cosas sencillas
-    return ["espresso", "latte"];
-  } else if (day === 2) {
-    // Día 2: añadimos cappu
-    return ["espresso", "latte", "cappu"];
-  } else {
-    // Día 3 en adelante: todas
-    return ["espresso", "latte", "cappu", "mocha"];
-  }
+  if (day === 1) return ["espresso", "latte"];
+  if (day === 2) return ["espresso", "latte", "cappu"];
+  return ["espresso", "latte", "cappu", "mocha"];
 }
 
-// sprites de clientes
 const customers = [
   "assets/super1.png",
   "assets/super2.png",
@@ -75,7 +59,6 @@ const customers = [
   "assets/super5.png",
 ];
 
-// ---------- HUD ----------
 function updateHUD() {
   timeEl.textContent = timeLeft;
   scoreEl.textContent = score;
@@ -83,35 +66,37 @@ function updateHUD() {
   dayEl.textContent = day;
 }
 
-// ---------- PROGRESO DE DÍA ----------
 function checkDayProgress() {
   if (ordersServed > 0 && ordersServed % ORDERS_PER_DAY === 0) {
+    const finishedDay = day;
     day++;
     updateHUD();
-    showDayCompleteOverlay(day - 1); // muestra el día que acabas de terminar
+    showDayComplete(finishedDay);
   }
 }
 
-function showDayCompleteOverlay(dayNumber) {
+function showDayComplete(num) {
   const overlay = document.getElementById("day-complete-overlay");
   const text = document.getElementById("day-complete-text");
 
-  text.textContent = `DAY ${dayNumber} COMPLETE!`;
-
+  text.textContent = `DAY ${num} COMPLETE!`;
   overlay.style.opacity = 1;
 
-  // ocultamos después de 1.5 segundos
+  isGameOver = true;
+
   setTimeout(() => {
     overlay.style.opacity = 0;
-  }, 1500);
+
+    setTimeout(() => {
+      isGameOver = false;
+      updateHUD();
+      newOrder();
+    }, 400);
+  }, 2000);
 }
 
-// ---------- RECETA VISUAL ----------
 function updateRecipePanel() {
-  if (!currentRecipe) return;
-
   recipeContent.innerHTML = "";
-
   const recipe = recipes[currentRecipe];
 
   recipe.forEach((name, index) => {
@@ -129,64 +114,47 @@ function updateRecipePanel() {
   });
 }
 
-// ---------- CLIENTE RANDOM ----------
 function setRandomCustomer() {
-  if (!customerImg) return;
-
   const index = Math.floor(Math.random() * customers.length);
   customerImg.src = customers[index];
 
-  // reiniciar animación de entrada
   customerImg.classList.remove("customer-enter");
-  void customerImg.offsetWidth; // truco para reiniciar animación
+  void customerImg.offsetWidth;
   customerImg.classList.add("customer-enter");
 }
 
-// ---------- NUEVO PEDIDO ----------
 function newOrder() {
   if (isGameOver) return;
 
-  // recetas disponibles según el día actual
   const available = getAvailableRecipes();
   const index = Math.floor(Math.random() * available.length);
   currentRecipe = available[index];
 
   orderTextEl.textContent = currentRecipe.toUpperCase();
-
-  // limpiar selección
   selection = [];
   updateOutputArea();
 
-  // tiempo según el día
   timeLeft = BASE_TIME - (day - 1) * TIME_DECREASE_PER_DAY;
-  if (timeLeft < MIN_TIME) {
-    timeLeft = MIN_TIME;
-  }
+  if (timeLeft < MIN_TIME) timeLeft = MIN_TIME;
 
   updateHUD();
   updateRecipePanel();
   setRandomCustomer();
 }
 
-// ---------- GAME OVER ----------
 function gameOver() {
   isGameOver = true;
-  // OJO: ya no usamos clearInterval(timerId); el intervalo sigue,
-  // pero como isGameOver = true, el timer deja de restar tiempo.
 
-  // mostrar score final en la end screen
   finalScoreEl.textContent = score;
 
-  // ocultar game screen y mostrar end screen
   gameScreen.style.display = "none";
-  endScreen.style.display = "block";
+  endScreen.style.display = "flex";
 }
-// ---------- TIMER ----------
+
 timerId = setInterval(() => {
   if (isGameOver) return;
   if (gameScreen.style.display === "none") return;
 
-  // 👇 ESTO FALTABA
   timeLeft--;
   if (timeLeft < 0) timeLeft = 0;
   updateHUD();
@@ -201,20 +169,16 @@ timerId = setInterval(() => {
     }
     updateHUD();
 
-    // cuenta pedido fallado por tiempo
     ordersServed++;
     checkDayProgress();
-
     newOrder();
   }
 }, 1000);
 
-// ---------- START BUTTON ----------
 document.querySelector(".start-btn").addEventListener("click", () => {
   startScreen.style.display = "none";
   gameScreen.style.display = "block";
 
-  // resetear estado por si se reinicia
   score = 0;
   lives = 3;
   day = 1;
@@ -226,7 +190,6 @@ document.querySelector(".start-btn").addEventListener("click", () => {
   newOrder();
 });
 
-// ---------- OUTPUT (INGREDIENTES ELEGIDOS) ----------
 function updateOutputArea() {
   outputArea.innerHTML = "";
 
@@ -248,32 +211,27 @@ function removeIngredient(index) {
   updateOutputArea();
 }
 
-// ---------- CLICK EN INGREDIENTES DEL ESTANTE ----------
 shelfItems.forEach((el) => {
   el.addEventListener("click", () => {
     if (isGameOver) return;
-    if (selection.length >= MAX_INGREDIENTS) return;
+    if (selection.length >= 4) return;
 
-    const name = el.dataset.name; // "milk", "coffee", etc.
+    const name = el.dataset.name;
     selection.push(name);
     updateOutputArea();
   });
 });
 
-// ---------- PREPARAR BEBIDA ----------
 function brewDrink() {
   if (isGameOver) return;
   if (!currentRecipe) return;
-  if (selection.length === 0) return; // no penalizar si está vacío
+  if (selection.length === 0) return;
 
   const expected = recipes[currentRecipe];
 
-  const sortedSel = [...selection].sort();
-  const sortedExp = [...expected].sort();
-
   const ok =
     selection.length === expected.length &&
-    sortedSel.join(",") === sortedExp.join(",");
+    [...selection].sort().join(",") === [...expected].sort().join(",");
 
   if (ok) {
     score += 10;
@@ -289,14 +247,11 @@ function brewDrink() {
     updateHUD();
   }
 
-  // este pedido ya se atendió (bien o mal)
   ordersServed++;
   checkDayProgress();
-
   newOrder();
 }
 
-// botón y barra espaciadora
 brewBtn.addEventListener("click", brewDrink);
 
 document.addEventListener("keydown", (event) => {
@@ -306,41 +261,18 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-function showDayComplete(completedDay) {
-  const overlay = document.getElementById("day-complete-overlay");
-  const text = document.getElementById("day-complete-text");
-
-  text.textContent = `DAY ${completedDay} COMPLETE!`;
-  overlay.style.opacity = 1;
-
-  // Pausar el juego temporalmente
-  isGameOver = true;
-
-  setTimeout(() => {
-    overlay.style.opacity = 0;
-
-    setTimeout(() => {
-      isGameOver = false;
-      updateHUD();
-      newOrder(); // arrancamos el día siguiente
-    }, 400);
-  }, 2200);
-}
-
+/* End screen: return to start */
 backToStartBtn.addEventListener("click", () => {
-  // ocultamos la end screen y volvemos al start
   endScreen.style.display = "none";
   startScreen.style.display = "block";
+  isGameOver = false;
 });
 
-// ----- INSTRUCTIONS PANEL -----
-
-// Abrir instrucciones
+/* Instructions screen */
 instructionsBtn.addEventListener("click", () => {
   instructionsScreen.style.display = "flex";
 });
 
-// Cerrar instrucciones
 closeInstructionsBtn.addEventListener("click", () => {
   instructionsScreen.style.display = "none";
 });

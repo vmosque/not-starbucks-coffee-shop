@@ -1,4 +1,3 @@
-/* Centrar el juego en la ventana */
 body {
   margin: 0;
   background-color: #111;
@@ -19,7 +18,6 @@ body {
   image-rendering: pixelated;
 }
 
-/* Taza */
 .mug-layer {
   position: absolute;
   top: 260px;
@@ -32,7 +30,6 @@ body {
   image-rendering: pixelated;
 }
 
-/* Pizarra */
 #board-layer {
   position: absolute;
   bottom: -100px;
@@ -45,33 +42,28 @@ body {
   image-rendering: pixelated;
 }
 
-.start-btn {
+.start-btn,
+.instructions-btn {
   position: absolute;
-  top: 145px;
   left: 50%;
   transform: translateX(-50%);
   font-family: "Press Start 2P", monospace;
-  font-size: 14px;
-  letter-spacing: 2px;
-  color: #efd8a0;
   background: transparent;
   border: none;
+  color: #efd8a0;
+}
+
+.start-btn {
+  top: 145px;
+  font-size: 14px;
+  letter-spacing: 2px;
 }
 
 .instructions-btn {
-  position: absolute;
   top: 195px;
-  left: 47%;
-  transform: translateX(-50%);
-  font-family: "Press Start 2P", monospace;
   font-size: 9px;
-  letter-spacing: 1px;
-  color: #efd8a0;
-  background: transparent;
-  border: none;
 }
 
-/* pequeño efecto hover */
 #board-layer button:hover {
   transform: translateX(-50%) scale(1.05);
 }
@@ -84,10 +76,10 @@ body {
   background-image: url("../assets/game-screen-background-img.png");
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  display: none; /* oculto al principio */
+  display: none;
 }
 
-/* HUD ARRIBA */
+/* HUD */
 #hud {
   position: absolute;
   top: 10px;
@@ -102,7 +94,7 @@ body {
   text-shadow: 1px 1px #4b2a1e;
 }
 
-/* Pedido */
+/* Order */
 #order-area {
   position: absolute;
   top: 60px;
@@ -112,25 +104,24 @@ body {
   color: #efd8a0;
 }
 
-/* Cliente */
+/* Customer */
 #customer-area {
   position: absolute;
-  top: 340px; /* bájalo un poquito para no chocar con las botellas */
-  left: 50%; /* centro horizontal */
+  top: 340px;
+  left: 50%;
   transform: translateX(-50%);
   height: 150px;
   display: flex;
   align-items: flex-end;
-  pointer-events: none; /* para que no bloquee clicks del estante */
-  z-index: 5; /* por si quieres que se vea por delante */
+  pointer-events: none;
+  z-index: 5;
 }
 
 #customer-img {
-  height: 230px; /* cambia si tu sprite es más grande/pequeño */
+  height: 230px;
   image-rendering: pixelated;
 }
 
-/* Animación simple de entrada */
 .customer-enter {
   animation: customer-enter 0.3s ease-out;
 }
@@ -146,7 +137,7 @@ body {
   }
 }
 
-/* Estante */
+/* Shelf */
 #shelf {
   position: absolute;
   inset: 0;
@@ -159,7 +150,6 @@ body {
   cursor: pointer;
 }
 
-/* posiciones de cada ingrediente en el estante */
 #shelf img[data-name="milk"] {
   top: 55px;
   left: 30px;
@@ -184,7 +174,7 @@ body {
   transform: scale(1.07);
 }
 
-/* BARRA INFERIOR */
+/* Bottom bar */
 #bottom-bar {
   position: absolute;
   left: 0;
@@ -197,7 +187,7 @@ body {
   padding: 0 60px;
 }
 
-/* Panel "Your drink" */
+/* Drink panel */
 #drink-panel {
   display: flex;
   flex-direction: column;
@@ -206,7 +196,6 @@ body {
   border: 3px solid #b8833f;
   background: #d9a85a;
   box-shadow: 0 0 0 3px #7b4b25;
-
   width: 360px;
   height: 120px;
   box-sizing: border-box;
@@ -218,13 +207,12 @@ body {
   color: #4b2a1e;
 }
 
-/* Ingredientes seleccionados */
+/* Selected ingredients */
 #output-area {
   display: flex;
   gap: 10px;
   align-items: center;
   justify-content: flex-start;
-
   width: 100%;
   height: 70px;
   overflow: hidden;
@@ -233,11 +221,11 @@ body {
 .selected-ing {
   width: 48px;
   height: auto;
-  image-rendering: pixelated;
   cursor: pointer;
+  image-rendering: pixelated;
 }
 
-/* Panel RECETA */
+/* Recipe panel */
 #recipe-panel {
   display: flex;
   flex-direction: column;
@@ -246,22 +234,13 @@ body {
   border: 3px solid #b8833f;
   background: #d9a85a;
   box-shadow: 0 0 0 3px #7b4b25;
-  width: 320px; /* opcional, solo por estética */
-  box-sizing: border-box;
+  width: 320px;
 }
 
 .recipe-title {
   font-family: "Press Start 2P", monospace;
   font-size: 10px;
   color: #4b2a1e;
-}
-
-#recipe-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
 }
 
 .recipe-ing {
@@ -275,19 +254,15 @@ body {
   color: #4b2a1e;
 }
 
-/* Botón BREW */
+/* Brew button */
 #brew-btn {
-  position: static; /* lo coloca el flex del bottom-bar */
   padding: 10px 22px;
   border: 3px solid #f5d9a3;
   background: #4b2a1e;
   color: #f5d9a3;
   font-family: "Press Start 2P", monospace;
   font-size: 10px;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px #000;
   cursor: pointer;
-  image-rendering: pixelated;
 }
 
 #brew-btn:hover {
@@ -296,10 +271,10 @@ body {
 }
 
 #brew-btn:active {
-  transform: translateY(0);
   background: #3a2415;
 }
 
+/* Day complete overlay */
 #day-complete-overlay {
   position: absolute;
   inset: 0;
@@ -324,29 +299,29 @@ body {
   box-shadow: 0 0 10px #000;
 }
 
-/* END SCREEN */
+/* End screen */
 #end-screen {
-  width: 1152px;
-  height: 768px;
-  position: relative;
-  background-color: #050505; /* fondo oscuro simple */
-  display: none; /* oculta al inicio */
-  display: none;
-}
-
-/* Caja centrada */
-.end-box {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 1152px;
+  height: 768px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 950;
+  font-family: "Press Start 2P", monospace;
+}
+
+.end-box {
   padding: 24px 40px;
   border: 4px solid #f5d9a3;
   background: #3a2415;
-  box-shadow: 0 0 12px #000;
   text-align: center;
-  font-family: "Press Start 2P", monospace;
   color: #f5d9a3;
+  box-shadow: 0 0 12px #000;
 }
 
 .end-box h1 {
@@ -355,44 +330,68 @@ body {
   text-shadow: 3px 3px #000;
 }
 
-.end-box p {
-  font-size: 12px;
-  margin-bottom: 20px;
-}
-
 #back-to-start-btn {
   padding: 10px 22px;
   border: 3px solid #f5d9a3;
   background: #4b2a1e;
   color: #f5d9a3;
-  font-family: "Press Start 2P", monospace;
   font-size: 10px;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px #000;
   cursor: pointer;
 }
 
 #back-to-start-btn:hover {
   background: #70402b;
-  transform: translateY(-2px);
 }
 
 #back-to-start-btn:active {
-  transform: translateY(0);
   background: #3a2415;
 }
 
-/* INSTRUCTIONS SCREEN */
+/* Instructions screen */
 #instructions-screen {
   position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  display: none; /* oculto */
+  top: 0;
+  left: 0;
+  width: 1152px;
+  height: 768px;
+  display: none;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 900;
+  font-family: "Press Start 2P", monospace;
 }
 
-#instructions-box {
-  background: #5c371d;
-  border: 
+.instructions-panel {
+  background: #d9a85a;
+  border: 4px solid #b8833f;
+  box-shadow: 0 0 0 4px #7b4b25;
+  padding: 28px 36px;
+  max-width: 700px;
+  color: #4b2a1e;
+  box-sizing: border-box;
+}
+
+.instructions-panel h2 {
+  font-size: 20px;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.instructions-panel ul {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+#close-instructions {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 22px;
+  background: #4b2a1e;
+  color: #f5d9a3;
+  border: 3px solid #f5d9a3;
+  font-size: 10px;
+  cursor: pointer;
+}
