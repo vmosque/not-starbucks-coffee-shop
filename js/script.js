@@ -21,6 +21,10 @@ const endScreen = document.getElementById("end-screen");
 const finalScoreEl = document.getElementById("final-score");
 const backToStartBtn = document.getElementById("back-to-start-btn");
 
+const instructionsScreen = document.getElementById("instructions-screen");
+const instructionsBtn = document.querySelector(".instructions-btn");
+const closeInstructionsBtn = document.getElementById("close-instructions");
+
 // ESTADO DEL JUEGO
 let selection = []; // ingredientes elegidos
 let score = 0;
@@ -327,4 +331,16 @@ backToStartBtn.addEventListener("click", () => {
   // ocultamos la end screen y volvemos al start
   endScreen.style.display = "none";
   startScreen.style.display = "block";
+});
+
+// ----- INSTRUCTIONS PANEL -----
+
+// Abrir instrucciones
+instructionsBtn.addEventListener("click", () => {
+  instructionsScreen.style.display = "flex";
+});
+
+// Cerrar instrucciones
+closeInstructionsBtn.addEventListener("click", () => {
+  instructionsScreen.style.display = "none";
 });
