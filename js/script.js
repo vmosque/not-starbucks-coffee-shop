@@ -8,11 +8,18 @@ const scoreEl = document.getElementById("score");
 const livesEl = document.getElementById("lives");
 const orderTextEl = document.getElementById("order-text");
 
+// Cliente
+const customerImg = document.getElementById("customer-img");
+
 // elementos del juego
 const shelfItems = document.querySelectorAll(".ingredient");
 const outputArea = document.getElementById("output-area");
 const recipeContent = document.getElementById("recipe-content");
 const brewBtn = document.getElementById("brew-btn");
+
+const endScreen = document.getElementById("end-screen");
+const finalScoreEl = document.getElementById("final-score");
+const backToStartBtn = document.getElementById("back-to-start-btn");
 
 // ESTADO DEL JUEGO
 let selection = []; // ingredientes elegidos
@@ -23,6 +30,12 @@ let timeLeft = 15;
 let currentRecipe = null;
 let isGameOver = false;
 let timerId = null;
+
+let ordersServed = 0;
+const ORDERS_PER_DAY = 5; // pedidos para subir de día
+const BASE_TIME = 20; // tiempo base del Día 1
+const MIN_TIME = 8; // tiempo mínimo
+const TIME_DECREASE_PER_DAY = 3; // se resta por cada día
 
 // RECETAS
 const recipes = {
@@ -35,12 +48,58 @@ const recipes = {
 const recipeNames = Object.keys(recipes);
 const MAX_INGREDIENTS = 4;
 
+// Qué recetas están disponibles según el día
+function getAvailableRecipes() {
+  if (day === 1) {
+    // Día 1: solo cosas sencillas
+    return ["espresso", "latte"];
+  } else if (day === 2) {
+    // Día 2: añadimos cappu
+    return ["espresso", "latte", "cappu"];
+  } else {
+    // Día 3 en adelante: todas
+    return ["espresso", "latte", "cappu", "mocha"];
+  }
+}
+
+// sprites de clientes
+const customers = [
+  "assets/super1.png",
+  "assets/super2.png",
+  "assets/super3.png",
+  "assets/super4.png",
+  "assets/super5.png",
+];
+
 // ---------- HUD ----------
 function updateHUD() {
   timeEl.textContent = timeLeft;
   scoreEl.textContent = score;
   livesEl.textContent = lives;
   dayEl.textContent = day;
+}
+
+// ---------- PROGRESO DE DÍA ----------
+function checkDayProgress() {
+  if (ordersServed > 0 && ordersServed % ORDERS_PER_DAY === 0) {
+    day++;
+    updateHUD();
+    showDayCompleteOverlay(day - 1); // muestra el día que acabas de terminar
+  }
+}
+
+function showDayCompleteOverlay(dayNumber) {
+  const overlay = document.getElementById("day-complete-overlay");
+  const text = document.getElementById("day-complete-text");
+
+  text.textContent = `DAY ${dayNumber} COMPLETE!`;
+
+  overlay.style.opacity = 1;
+
+  // ocultamos después de 1.5 segundos
+  setTimeout(() => {
+    overlay.style.opacity = 0;
+  }, 1500);
 }
 
 // ---------- RECETA VISUAL ----------
@@ -66,19 +125,27 @@ function updateRecipePanel() {
   });
 }
 
-// ---------- GAME OVER ----------
-function gameOver() {
-  isGameOver = true;
-  clearInterval(timerId);
-  alert("GAME OVER");
+// ---------- CLIENTE RANDOM ----------
+function setRandomCustomer() {
+  if (!customerImg) return;
+
+  const index = Math.floor(Math.random() * customers.length);
+  customerImg.src = customers[index];
+
+  // reiniciar animación de entrada
+  customerImg.classList.remove("customer-enter");
+  void customerImg.offsetWidth; // truco para reiniciar animación
+  customerImg.classList.add("customer-enter");
 }
 
 // ---------- NUEVO PEDIDO ----------
 function newOrder() {
   if (isGameOver) return;
 
-  const index = Math.floor(Math.random() * recipeNames.length);
-  currentRecipe = recipeNames[index];
+  // recetas disponibles según el día actual
+  const available = getAvailableRecipes();
+  const index = Math.floor(Math.random() * available.length);
+  currentRecipe = available[index];
 
   orderTextEl.textContent = currentRecipe.toUpperCase();
 
@@ -86,17 +153,36 @@ function newOrder() {
   selection = [];
   updateOutputArea();
 
-  // reiniciar tiempo
-  timeLeft = 15;
+  // tiempo según el día
+  timeLeft = BASE_TIME - (day - 1) * TIME_DECREASE_PER_DAY;
+  if (timeLeft < MIN_TIME) {
+    timeLeft = MIN_TIME;
+  }
+
   updateHUD();
   updateRecipePanel();
+  setRandomCustomer();
 }
 
+// ---------- GAME OVER ----------
+function gameOver() {
+  isGameOver = true;
+  // OJO: ya no usamos clearInterval(timerId); el intervalo sigue,
+  // pero como isGameOver = true, el timer deja de restar tiempo.
+
+  // mostrar score final en la end screen
+  finalScoreEl.textContent = score;
+
+  // ocultar game screen y mostrar end screen
+  gameScreen.style.display = "none";
+  endScreen.style.display = "block";
+}
 // ---------- TIMER ----------
 timerId = setInterval(() => {
   if (isGameOver) return;
   if (gameScreen.style.display === "none") return;
 
+  // 👇 ESTO FALTABA
   timeLeft--;
   if (timeLeft < 0) timeLeft = 0;
   updateHUD();
@@ -110,6 +196,11 @@ timerId = setInterval(() => {
       return;
     }
     updateHUD();
+
+    // cuenta pedido fallado por tiempo
+    ordersServed++;
+    checkDayProgress();
+
     newOrder();
   }
 }, 1000);
@@ -123,8 +214,10 @@ document.querySelector(".start-btn").addEventListener("click", () => {
   score = 0;
   lives = 3;
   day = 1;
-  timeLeft = 15;
+  timeLeft = BASE_TIME;
   isGameOver = false;
+  ordersServed = 0;
+
   updateHUD();
   newOrder();
 });
@@ -192,6 +285,10 @@ function brewDrink() {
     updateHUD();
   }
 
+  // este pedido ya se atendió (bien o mal)
+  ordersServed++;
+  checkDayProgress();
+
   newOrder();
 }
 
@@ -203,4 +300,31 @@ document.addEventListener("keydown", (event) => {
     event.preventDefault();
     brewDrink();
   }
+});
+
+function showDayComplete(completedDay) {
+  const overlay = document.getElementById("day-complete-overlay");
+  const text = document.getElementById("day-complete-text");
+
+  text.textContent = `DAY ${completedDay} COMPLETE!`;
+  overlay.style.opacity = 1;
+
+  // Pausar el juego temporalmente
+  isGameOver = true;
+
+  setTimeout(() => {
+    overlay.style.opacity = 0;
+
+    setTimeout(() => {
+      isGameOver = false;
+      updateHUD();
+      newOrder(); // arrancamos el día siguiente
+    }, 400);
+  }, 2200);
+}
+
+backToStartBtn.addEventListener("click", () => {
+  // ocultamos la end screen y volvemos al start
+  endScreen.style.display = "none";
+  startScreen.style.display = "block";
 });
