@@ -9,6 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" href="assets/coffee.png" />
   </head>
   <body>
     <!-- START SCREEN -->
@@ -22,49 +23,48 @@
         <button class="start-btn">START GAME</button>
         <button class="instructions-btn">INSTRUCTIONS</button>
       </div>
-    </div>
 
-    <!-- INSTRUCTIONS SCREEN -->
-    <div id="instructions-screen">
-      <div class="instructions-panel">
-        <h2>HOW TO PLAY</h2>
+      <!-- INSTRUCTIONS SCREEN  -->
+      <div id="instructions-screen">
+        <div class="instructions-panel">
+          <h2>HOW TO PLAY</h2>
 
-        <ul>
-          <li>Click ingredients on the shelf to add them.</li>
-          <li>Click an ingredient below to remove it.</li>
-          <li>Match the recipe shown on the right.</li>
-          <li>Press BREW or SPACE to serve the drink.</li>
-          <li>Correct drink = +10 points.</li>
-          <li>Wrong drink or timeout = lose 1 life.</li>
-          <li>Serve enough customers to reach the next day!</li>
-        </ul>
+          <ul>
+            <li>Click ingredients on the shelf to add them.</li>
+            <li>Click an ingredient below to remove it.</li>
+            <li>Match the recipe shown on the right.</li>
+            <li>Press BREW or SPACE to serve the drink.</li>
+            <li>Correct drink = +10 points.</li>
+            <li>Wrong drink or timeout = lose 1 life.</li>
+            <li>Serve enough customers to reach the next day!</li>
+          </ul>
 
-        <button id="close-instructions">BACK</button>
+          <button id="close-instructions">BACK</button>
+        </div>
       </div>
     </div>
 
     <!-- GAME SCREEN -->
     <div id="game-screen">
-      <!-- HUD -->
       <div id="hud">
         <div class="hud-left">Day <span id="day">1</span></div>
+
         <div class="hud-center">Time <span id="time">15</span>s</div>
+
         <div class="hud-right">
           Score <span id="score">0</span> | Lives <span id="lives">3</span>
+          <button id="mute-btn">MUTE</button>
         </div>
       </div>
 
-      <!-- Pedido -->
       <div id="order-area">
         Customer wants: <span id="order-text">ESPRESSO</span>
       </div>
 
-      <!-- Cliente -->
       <div id="customer-area">
         <img id="customer-img" src="assets/super1.png" alt="Customer" />
       </div>
 
-      <!-- Estante con ingredientes -->
       <div id="shelf">
         <img src="assets/ing-milk.png" class="ingredient" data-name="milk" />
         <img
@@ -76,21 +76,17 @@
         <img src="assets/ing-foam.png" class="ingredient" data-name="foam" />
       </div>
 
-      <!-- Barra inferior -->
       <div id="bottom-bar">
-        <!-- Tu bebida -->
         <div id="drink-panel">
           <div id="drink-label">Your drink:</div>
           <div id="output-area"></div>
         </div>
 
-        <!-- Receta del pedido actual -->
         <div id="recipe-panel">
           <div class="recipe-title">Recipe:</div>
           <div id="recipe-content"></div>
         </div>
 
-        <!-- Botón para preparar -->
         <button id="brew-btn">BREW</button>
       </div>
     </div>
@@ -104,7 +100,6 @@
       </div>
     </div>
 
-    <!-- Overlay fin de día -->
     <div id="day-complete-overlay">
       <div id="day-complete-text">DAY 1 COMPLETE!</div>
     </div>

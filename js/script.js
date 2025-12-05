@@ -22,6 +22,34 @@ const instructionsScreen = document.getElementById("instructions-screen");
 const instructionsBtn = document.querySelector(".instructions-btn");
 const closeInstructionsBtn = document.getElementById("close-instructions");
 
+const muteBtn = document.getElementById("mute-btn");
+
+/* Sonidos */
+const addSound = new Audio("assets/add-sound.mp3");
+const correctSound = new Audio("assets/correct-drink.mp3");
+const dayFinishSound = new Audio("assets/day-finish.mp3");
+const sadTrumpetSound = new Audio("assets/sad-trumpet.mp3");
+
+addSound.volume = 0.4;
+correctSound.volume = 0.5;
+dayFinishSound.volume = 0.5;
+sadTrumpetSound.volume = 0.5;
+
+const allSounds = [addSound, correctSound, dayFinishSound, sadTrumpetSound];
+
+let muted = false;
+
+function setMuted(value) {
+  muted = value;
+  allSounds.forEach((audio) => (audio.muted = muted));
+  muteBtn.textContent = muted ? "UNMUTE" : "MUTE";
+}
+
+muteBtn.addEventListener("click", () => {
+  setMuted(!muted);
+});
+
+/* Estado del juego */
 let selection = [];
 let score = 0;
 let lives = 3;
@@ -29,15 +57,16 @@ let day = 1;
 let timeLeft = 15;
 let currentRecipe = null;
 let isGameOver = false;
-
+let isPaused = false;
 let timerId = null;
-let ordersServed = 0;
 
+let ordersServed = 0;
 const ORDERS_PER_DAY = 5;
 const BASE_TIME = 20;
 const MIN_TIME = 8;
 const TIME_DECREASE_PER_DAY = 3;
 
+/* Recetas */
 const recipes = {
   latte: ["coffee", "milk", "foam"],
   mocha: ["coffee", "milk", "cocoa"],
@@ -45,12 +74,16 @@ const recipes = {
   cappu: ["coffee", "foam", "foam"],
 };
 
+const MAX_INGREDIENTS = 4;
+
+/* Recetas disponibles por día */
 function getAvailableRecipes() {
   if (day === 1) return ["espresso", "latte"];
   if (day === 2) return ["espresso", "latte", "cappu"];
   return ["espresso", "latte", "cappu", "mocha"];
 }
 
+/* Clientes */
 const customers = [
   "assets/super1.png",
   "assets/super2.png",
@@ -60,42 +93,48 @@ const customers = [
 ];
 
 function updateHUD() {
+  dayEl.textContent = day;
   timeEl.textContent = timeLeft;
   scoreEl.textContent = score;
   livesEl.textContent = lives;
-  dayEl.textContent = day;
 }
 
+/* Subida de día */
 function checkDayProgress() {
   if (ordersServed > 0 && ordersServed % ORDERS_PER_DAY === 0) {
-    const finishedDay = day;
+    const completedDay = day;
     day++;
     updateHUD();
-    showDayComplete(finishedDay);
+    showDayComplete(completedDay);
   }
 }
 
-function showDayComplete(num) {
+function showDayComplete(completedDay) {
   const overlay = document.getElementById("day-complete-overlay");
   const text = document.getElementById("day-complete-text");
 
-  text.textContent = `DAY ${num} COMPLETE!`;
+  text.textContent = `DAY ${completedDay} COMPLETE!`;
   overlay.style.opacity = 1;
 
-  isGameOver = true;
+  isPaused = true;
+
+  dayFinishSound.currentTime = 0;
+  dayFinishSound.play();
 
   setTimeout(() => {
     overlay.style.opacity = 0;
 
     setTimeout(() => {
-      isGameOver = false;
-      updateHUD();
+      isPaused = false;
       newOrder();
     }, 400);
   }, 2000);
 }
 
+/* Receta visual */
 function updateRecipePanel() {
+  if (!currentRecipe) return;
+
   recipeContent.innerHTML = "";
   const recipe = recipes[currentRecipe];
 
@@ -114,6 +153,7 @@ function updateRecipePanel() {
   });
 }
 
+/* Cliente random */
 function setRandomCustomer() {
   const index = Math.floor(Math.random() * customers.length);
   customerImg.src = customers[index];
@@ -123,6 +163,7 @@ function setRandomCustomer() {
   customerImg.classList.add("customer-enter");
 }
 
+/* Nuevo pedido */
 function newOrder() {
   if (isGameOver) return;
 
@@ -131,6 +172,7 @@ function newOrder() {
   currentRecipe = available[index];
 
   orderTextEl.textContent = currentRecipe.toUpperCase();
+
   selection = [];
   updateOutputArea();
 
@@ -142,17 +184,21 @@ function newOrder() {
   setRandomCustomer();
 }
 
+/* Game over */
 function gameOver() {
   isGameOver = true;
 
-  finalScoreEl.textContent = score;
+  sadTrumpetSound.currentTime = 0;
+  sadTrumpetSound.play();
 
+  finalScoreEl.textContent = score;
   gameScreen.style.display = "none";
-  endScreen.style.display = "flex";
+  endScreen.style.display = "block";
 }
 
+/* Timer */
 timerId = setInterval(() => {
-  if (isGameOver) return;
+  if (isGameOver || isPaused) return;
   if (gameScreen.style.display === "none") return;
 
   timeLeft--;
@@ -175,6 +221,7 @@ timerId = setInterval(() => {
   }
 }, 1000);
 
+/* Start game */
 document.querySelector(".start-btn").addEventListener("click", () => {
   startScreen.style.display = "none";
   gameScreen.style.display = "block";
@@ -184,12 +231,14 @@ document.querySelector(".start-btn").addEventListener("click", () => {
   day = 1;
   timeLeft = BASE_TIME;
   isGameOver = false;
+  isPaused = false;
   ordersServed = 0;
 
   updateHUD();
   newOrder();
 });
 
+/* Ingredientes seleccionados */
 function updateOutputArea() {
   outputArea.innerHTML = "";
 
@@ -211,31 +260,42 @@ function removeIngredient(index) {
   updateOutputArea();
 }
 
+/* Click en ingredientes del estante */
 shelfItems.forEach((el) => {
   el.addEventListener("click", () => {
-    if (isGameOver) return;
-    if (selection.length >= 4) return;
+    if (isGameOver || isPaused) return;
+    if (selection.length >= MAX_INGREDIENTS) return;
 
     const name = el.dataset.name;
     selection.push(name);
     updateOutputArea();
+
+    addSound.currentTime = 0;
+    addSound.play();
   });
 });
 
+/* Preparar bebida */
 function brewDrink() {
-  if (isGameOver) return;
+  if (isGameOver || isPaused) return;
   if (!currentRecipe) return;
   if (selection.length === 0) return;
 
   const expected = recipes[currentRecipe];
 
+  const sortedSel = [...selection].sort();
+  const sortedExp = [...expected].sort();
+
   const ok =
     selection.length === expected.length &&
-    [...selection].sort().join(",") === [...expected].sort().join(",");
+    sortedSel.join(",") === sortedExp.join(",");
 
   if (ok) {
     score += 10;
     updateHUD();
+
+    correctSound.currentTime = 0;
+    correctSound.play();
   } else {
     lives--;
     if (lives <= 0) {
@@ -245,6 +305,9 @@ function brewDrink() {
       return;
     }
     updateHUD();
+
+    sadTrumpetSound.currentTime = 0;
+    sadTrumpetSound.play();
   }
 
   ordersServed++;
@@ -261,14 +324,13 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-/* End screen: return to start */
+/* Volver al inicio desde GAME OVER */
 backToStartBtn.addEventListener("click", () => {
   endScreen.style.display = "none";
   startScreen.style.display = "block";
-  isGameOver = false;
 });
 
-/* Instructions screen */
+/* Instrucciones */
 instructionsBtn.addEventListener("click", () => {
   instructionsScreen.style.display = "flex";
 });

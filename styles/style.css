@@ -1,3 +1,4 @@
+/* Centrar el juego en la ventana */
 body {
   margin: 0;
   background-color: #111;
@@ -18,6 +19,7 @@ body {
   image-rendering: pixelated;
 }
 
+/* Taza */
 .mug-layer {
   position: absolute;
   top: 260px;
@@ -30,6 +32,7 @@ body {
   image-rendering: pixelated;
 }
 
+/* Pizarra */
 #board-layer {
   position: absolute;
   bottom: -100px;
@@ -42,318 +45,41 @@ body {
   image-rendering: pixelated;
 }
 
-.start-btn,
-.instructions-btn {
+.start-btn {
   position: absolute;
+  top: 145px;
   left: 50%;
   transform: translateX(-50%);
   font-family: "Press Start 2P", monospace;
-  background: transparent;
-  border: none;
-  color: #efd8a0;
-}
-
-.start-btn {
-  top: 145px;
   font-size: 14px;
   letter-spacing: 2px;
+  color: #efd8a0;
+  background: transparent;
+  border: none;
 }
 
 .instructions-btn {
+  position: absolute;
   top: 195px;
+  left: 47%;
+  transform: translateX(-50%);
+  font-family: "Press Start 2P", monospace;
   font-size: 9px;
+  letter-spacing: 1px;
+  color: #efd8a0;
+  background: transparent;
+  border: none;
 }
 
+/* Hover botones del cartel */
 #board-layer button:hover {
   transform: translateX(-50%) scale(1.05);
 }
 
-/* GAME SCREEN */
-#game-screen {
-  width: 1152px;
-  height: 768px;
-  position: relative;
-  background-image: url("../assets/game-screen-background-img.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  display: none;
-}
-
-/* HUD */
-#hud {
-  position: absolute;
-  top: 10px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 30px;
-  font-family: "Press Start 2P", monospace;
-  font-size: 14px;
-  color: #efd8a0;
-  text-shadow: 1px 1px #4b2a1e;
-}
-
-/* Order */
-#order-area {
-  position: absolute;
-  top: 60px;
-  left: 30px;
-  font-family: "Press Start 2P";
-  font-size: 12px;
-  color: #efd8a0;
-}
-
-/* Customer */
-#customer-area {
-  position: absolute;
-  top: 340px;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 150px;
-  display: flex;
-  align-items: flex-end;
-  pointer-events: none;
-  z-index: 5;
-}
-
-#customer-img {
-  height: 230px;
-  image-rendering: pixelated;
-}
-
-.customer-enter {
-  animation: customer-enter 0.3s ease-out;
-}
-
-@keyframes customer-enter {
-  from {
-    transform: translateX(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Shelf */
-#shelf {
-  position: absolute;
-  inset: 0;
-}
-
-.ingredient {
-  position: absolute;
-  width: 120px;
-  image-rendering: pixelated;
-  cursor: pointer;
-}
-
-#shelf img[data-name="milk"] {
-  top: 55px;
-  left: 30px;
-}
-
-#shelf img[data-name="coffee"] {
-  top: 65px;
-  left: 190px;
-}
-
-#shelf img[data-name="cocoa"] {
-  top: 100px;
-  left: 330px;
-}
-
-#shelf img[data-name="foam"] {
-  top: 50px;
-  left: 480px;
-}
-
-.ingredient:hover {
-  transform: scale(1.07);
-}
-
-/* Bottom bar */
-#bottom-bar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 30px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 60px;
-}
-
-/* Drink panel */
-#drink-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px 16px;
-  border: 3px solid #b8833f;
-  background: #d9a85a;
-  box-shadow: 0 0 0 3px #7b4b25;
-  width: 360px;
-  height: 120px;
-  box-sizing: border-box;
-}
-
-#drink-label {
-  font-family: "Press Start 2P", monospace;
-  font-size: 10px;
-  color: #4b2a1e;
-}
-
-/* Selected ingredients */
-#output-area {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  height: 70px;
-  overflow: hidden;
-}
-
-.selected-ing {
-  width: 48px;
-  height: auto;
-  cursor: pointer;
-  image-rendering: pixelated;
-}
-
-/* Recipe panel */
-#recipe-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px 16px;
-  border: 3px solid #b8833f;
-  background: #d9a85a;
-  box-shadow: 0 0 0 3px #7b4b25;
-  width: 320px;
-}
-
-.recipe-title {
-  font-family: "Press Start 2P", monospace;
-  font-size: 10px;
-  color: #4b2a1e;
-}
-
-.recipe-ing {
-  width: 40px;
-  image-rendering: pixelated;
-}
-
-.recipe-plus {
-  font-family: "Press Start 2P", monospace;
-  font-size: 12px;
-  color: #4b2a1e;
-}
-
-/* Brew button */
-#brew-btn {
-  padding: 10px 22px;
-  border: 3px solid #f5d9a3;
-  background: #4b2a1e;
-  color: #f5d9a3;
-  font-family: "Press Start 2P", monospace;
-  font-size: 10px;
-  cursor: pointer;
-}
-
-#brew-btn:hover {
-  background: #70402b;
-  transform: translateY(-2px);
-}
-
-#brew-btn:active {
-  background: #3a2415;
-}
-
-/* Day complete overlay */
-#day-complete-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Press Start 2P";
-  color: #ffd37a;
-  font-size: 32px;
-  text-shadow: 3px 3px #000;
-  z-index: 999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease-out;
-}
-
-#day-complete-text {
-  padding: 20px 40px;
-  border: 4px solid #ffd37a;
-  background: #5c371d;
-  box-shadow: 0 0 10px #000;
-}
-
-/* End screen */
-#end-screen {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1152px;
-  height: 768px;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 950;
-  font-family: "Press Start 2P", monospace;
-}
-
-.end-box {
-  padding: 24px 40px;
-  border: 4px solid #f5d9a3;
-  background: #3a2415;
-  text-align: center;
-  color: #f5d9a3;
-  box-shadow: 0 0 12px #000;
-}
-
-.end-box h1 {
-  font-size: 28px;
-  margin-bottom: 16px;
-  text-shadow: 3px 3px #000;
-}
-
-#back-to-start-btn {
-  padding: 10px 22px;
-  border: 3px solid #f5d9a3;
-  background: #4b2a1e;
-  color: #f5d9a3;
-  font-size: 10px;
-  cursor: pointer;
-}
-
-#back-to-start-btn:hover {
-  background: #70402b;
-}
-
-#back-to-start-btn:active {
-  background: #3a2415;
-}
-
-/* Instructions screen */
+/* INSTRUCTIONS OVERLAY (encima del start-screen) */
 #instructions-screen {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 1152px;
-  height: 768px;
+  inset: 0;
   display: none;
   justify-content: center;
   align-items: center;
@@ -379,7 +105,7 @@ body {
 }
 
 .instructions-panel ul {
-  margin-bottom: 20px;
+  margin: 0 0 20px;
   padding-left: 20px;
   font-size: 12px;
   line-height: 1.7;
@@ -392,6 +118,350 @@ body {
   background: #4b2a1e;
   color: #f5d9a3;
   border: 3px solid #f5d9a3;
+  font-family: "Press Start 2P", monospace;
   font-size: 10px;
   cursor: pointer;
+  image-rendering: pixelated;
+}
+
+#close-instructions:hover {
+  transform: translateY(-2px);
+  background: #70402b;
+}
+
+#close-instructions:active {
+  transform: translateY(0);
+  background: #3a2415;
+}
+
+/* GAME SCREEN */
+#game-screen {
+  width: 1152px;
+  height: 768px;
+  position: relative;
+  background-image: url("../assets/game-screen-background-img.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: none;
+}
+
+/* HUD ARRIBA */
+#hud {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 14px;
+  color: #efd8a0;
+  text-shadow: 1px 1px #4b2a1e;
+}
+
+.hud-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Botón MUTE */
+#mute-btn {
+  padding: 4px 10px;
+  border: 2px solid #f5d9a3;
+  background: #4b2a1e;
+  color: #f5d9a3;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-shadow: 1px 1px #000;
+}
+
+#mute-btn:hover {
+  background: #70402b;
+  transform: translateY(-1px);
+}
+
+#mute-btn:active {
+  transform: translateY(0);
+  background: #3a2415;
+}
+
+/* Pedido */
+#order-area {
+  position: absolute;
+  top: 60px;
+  left: 30px;
+  font-family: "Press Start 2P";
+  font-size: 12px;
+  color: #efd8a0;
+}
+
+/* Cliente */
+#customer-area {
+  position: absolute;
+  top: 340px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 150px;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+  z-index: 5;
+}
+
+#customer-img {
+  height: 230px;
+  image-rendering: pixelated;
+}
+
+/* Animación cliente */
+.customer-enter {
+  animation: customer-enter 0.3s ease-out;
+}
+
+@keyframes customer-enter {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Estante */
+#shelf {
+  position: absolute;
+  inset: 0;
+}
+
+.ingredient {
+  position: absolute;
+  width: 120px;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+/* Posiciones ingredientes */
+#shelf img[data-name="milk"] {
+  top: 55px;
+  left: 30px;
+}
+
+#shelf img[data-name="coffee"] {
+  top: 65px;
+  left: 190px;
+}
+
+#shelf img[data-name="cocoa"] {
+  top: 100px;
+  left: 330px;
+}
+
+#shelf img[data-name="foam"] {
+  top: 50px;
+  left: 480px;
+}
+
+.ingredient:hover {
+  transform: scale(1.07);
+}
+
+/* BARRA INFERIOR */
+#bottom-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+}
+
+/* Panel Your drink */
+#drink-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 3px solid #b8833f;
+  background: #d9a85a;
+  box-shadow: 0 0 0 3px #7b4b25;
+  width: 360px;
+  height: 120px;
+  box-sizing: border-box;
+}
+
+#drink-label {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  color: #4b2a1e;
+}
+
+/* Ingredientes seleccionados */
+#output-area {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 70px;
+  overflow: hidden;
+}
+
+.selected-ing {
+  width: 48px;
+  height: auto;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+/* Panel Receta */
+#recipe-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 3px solid #b8833f;
+  background: #d9a85a;
+  box-shadow: 0 0 0 3px #7b4b25;
+  width: 320px;
+  box-sizing: border-box;
+}
+
+.recipe-title {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  color: #4b2a1e;
+}
+
+#recipe-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.recipe-ing {
+  width: 40px;
+  image-rendering: pixelated;
+}
+
+.recipe-plus {
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  color: #4b2a1e;
+}
+
+/* Botón BREW */
+#brew-btn {
+  position: static;
+  padding: 10px 22px;
+  border: 3px solid #f5d9a3;
+  background: #4b2a1e;
+  color: #f5d9a3;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px #000;
+  cursor: pointer;
+  image-rendering: pixelated;
+}
+
+#brew-btn:hover {
+  background: #70402b;
+  transform: translateY(-2px);
+}
+
+#brew-btn:active {
+  transform: translateY(0);
+  background: #3a2415;
+}
+
+/* Overlay fin de día */
+#day-complete-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Press Start 2P";
+  color: #ffd37a;
+  font-size: 32px;
+  text-shadow: 3px 3px #000;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease-out;
+}
+
+#day-complete-text {
+  padding: 20px 40px;
+  border: 4px solid #ffd37a;
+  background: #5c371d;
+  box-shadow: 0 0 10px #000;
+}
+
+/* END SCREEN */
+#end-screen {
+  width: 1152px;
+  height: 768px;
+  position: relative;
+  background-color: #050505;
+  display: none;
+}
+
+.end-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 24px 40px;
+  border: 4px solid #f5d9a3;
+  background: #3a2415;
+  box-shadow: 0 0 12px #000;
+  text-align: center;
+  font-family: "Press Start 2P", monospace;
+  color: #f5d9a3;
+}
+
+.end-box h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+  text-shadow: 3px 3px #000;
+}
+
+.end-box p {
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+#back-to-start-btn {
+  padding: 10px 22px;
+  border: 3px solid #f5d9a3;
+  background: #4b2a1e;
+  color: #f5d9a3;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px #000;
+  cursor: pointer;
+}
+
+#back-to-start-btn:hover {
+  background: #70402b;
+  transform: translateY(-2px);
+}
+
+#back-to-start-btn:active {
+  transform: translateY(0);
+  background: #3a2415;
 }
